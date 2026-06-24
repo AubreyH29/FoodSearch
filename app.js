@@ -8,6 +8,10 @@ const locationInput = document.querySelector("#locationInput");
 const statusMessage = document.querySelector("#status");
 const restaurantMap = document.querySelector("#restaurantMap");
 const openMapsLink = document.querySelector("#openMapsLink");
+const foodTypeFilter = document.querySelector("#foodTypeFilter");
+
+let currentLocation = "";
+let currentFoodType = "";
 
 function showMapPage() {
   home.classList.add("is-hidden");
@@ -34,10 +38,19 @@ function updateRestaurantMap(query, message) {
   setStatus(message, "success");
 }
 
+function buildQuery(location, foodType) {
+  let query = `${foodType ? foodType + " " : ""}restaurants near ${location}`;
+  return query;
+}
+
 function updateMap(latitude, longitude) {
+  currentLocation = `${latitude},${longitude}`;
+  const query = buildQuery(currentLocation, currentFoodType);
   updateRestaurantMap(
-    `restaurants near ${latitude},${longitude}`,
-    "Showing restaurants near your current location."
+    query,
+    currentFoodType 
+      ? `Showing ${currentFoodType} restaurants near your current location.`
+      : "Showing restaurants near your current location."
   );
 }
 
@@ -50,10 +63,12 @@ function searchRestaurantsByLocation(location) {
     return;
   }
 
-  updateRestaurantMap(
-    `restaurants near ${trimmedLocation}`,
-    `Showing restaurants near ${trimmedLocation}.`
-  );
+  currentLocation = trimmedLocation;
+  const query = buildQuery(currentLocation, currentFoodType);
+  const statusText = currentFoodType
+    ? `Showing ${currentFoodType} restaurants near ${trimmedLocation}.`
+    : `Showing restaurants near ${trimmedLocation}.`;
+  updateRestaurantMap(query, statusText);
 }
 
 function loadNearbyRestaurants() {
@@ -83,10 +98,24 @@ function loadNearbyRestaurants() {
   );
 }
 
+function updateMapWithCurrentLocation() {
+  if (currentLocation) {
+    const query = buildQuery(currentLocation, currentFoodType);
+    const statusText = currentFoodType
+      ? `Showing ${currentFoodType} restaurants.`
+      : "Showing restaurants.";
+    updateRestaurantMap(query, statusText);
+  }
+}
+
 startButton.addEventListener("click", showMapPage);
 backButton.addEventListener("click", showHomePage);
 refreshButton.addEventListener("click", loadNearbyRestaurants);
 locationSearchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   searchRestaurantsByLocation(locationInput.value);
+});
+foodTypeFilter.addEventListener("change", (event) => {
+  currentFoodType = event.target.value;
+  updateMapWithCurrentLocation();
 });
