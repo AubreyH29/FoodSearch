@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodSearch</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <section id="home" class="screen home-screen">
+        <div class="home-copy">
+          <p class="eyebrow">FoodSearch</p>
+          <h1>Find nearby restaurants from your current location.</h1>
+          <p class="intro">
+            Open the map, share your location, or search any city, address, or neighborhood.
+          </p>
+          <button id="startButton" class="primary-button" type="button">
+            Find restaurants
+          </button>
+        </div>
+
+        <div class="map-preview" aria-hidden="true">
+          <div class="street street-a"></div>
+          <div class="street street-b"></div>
+          <div class="street street-c"></div>
+          <div class="pin"></div>
+          <div class="place place-one"></div>
+          <div class="place place-two"></div>
+          <div class="place place-three"></div>
+        </div>
+      </section>
+
+      <section id="mapPage" class="screen map-screen is-hidden">
+        <header class="app-header">
+          <button id="backButton" class="secondary-button" type="button">
+            Back
+          </button>
+          <div>
+            <p class="eyebrow">Nearby restaurants</p>
+            <h2>Restaurants around you</h2>
+          </div>
+        </header>
+
+        <div id="status" class="status" role="status">
+          Requesting your location...
+        </div>
+
+        <form id="locationSearchForm" class="search-form">
+          <label class="search-label" for="locationInput">Search restaurants near</label>
+          <div class="search-row">
+            <input
+              id="locationInput"
+              class="search-input"
+              name="location"
+              type="search"
+              placeholder="Enter a city, address, or neighborhood"
+              autocomplete="street-address"
+            />
+            <button class="primary-button compact" type="submit">Search</button>
+          </div>
+        </form>
+
+        <div class="map-shell">
+          <iframe
+            id="restaurantMap"
+            title="Google Maps showing nearby restaurants"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="actions">
+          <button id="refreshButton" class="primary-button compact" type="button">
+            Refresh location
+          </button>
+          <a id="openMapsLink" class="text-link" href="#" target="_blank" rel="noreferrer">
+            Open in Google Maps
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
